@@ -1,0 +1,91 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Einverständniserklärung{% endblock %}
+
+{% block content %}
+<p>
+    Vielen Dank, dass Sie bereit sind, an der Studie „Entscheidungspräferenzen“ teilzunehmen. Ziel dieser Studie ist es,
+    besser zu verstehen, wie sich Personen in bestimmten sozialen Situationen verhalten und wie sie sich dabei fühlen.
+    Wir werden Sie bitten, verschiedene Entscheidungen zu treffen, die finanzielle Auswirkungen haben. Ausgehend von
+    einem Geldbetrag, den wir Ihnen für die einzelnen Entscheidungen zur Verfügung stellen, können Sie am Ende der
+    Studie den Betrag behalten, der sich infolge Ihrer Entscheidungen und/oder den Entscheidungen
+    anderer Teilnehmer*innen in der Studie ergibt.
+
+</p>
+
+<p>
+    Die Vergütung beläuft sich zwischen 2€ und 3€, die Dauer beläuft sich auf ca. 10 Minuten. Verantwortlich für die
+    Studie sind Iris Schneider (i.k.schneider@uni-koeln.de) und Angela Dorrough (angela.dorrough@uni-koeln.de). Die
+    Teilnahme an dieser Studie ist freiwillig. Wenn Sie die Studie abbrechen möchten, können Sie das jederzeit tun,
+    ohne einen Nachteil zu erleiden. Sie erhalten dann nur eine anteilige Vergütung in Höhe von 2€. Wenn Sie die Studie
+    frühzeitig beenden, werden Ihre bis zum Abbruch getätigten Angaben gelöscht. Ihre Daten werden in diesem Fall weder
+    gespeichert, noch gehen sie in die Auswertung ein.
+</p>
+
+<p>
+    Im Rahmen der Studie werden wir folgende Datenkategorien von Ihnen verarbeiten: Sozio-demographische Daten
+    (Alter, Geschlecht, etc.), Ihre Antworten bzw. Entscheidungen sowie den erspielten Geldbetrag. Die Daten sind
+    pseudonymisiert, d.h., Sie geben ausschließlich Ihre Decision Lab ID an. Die Decision Lab ID ermöglicht, die
+    Auszahlung zu gewährleisten. Darüber hinaus werden wir Ihre aktuellen Antworten für explorative Analysen Ihren
+    Antworten aus der Grunderhebung zuordnen. Ihre Kontaktdaten mit dem Pseudonym (die sog. Zuordnungsliste) werden
+    jedoch strikt von den wissenschaftlichen Daten getrennt aufbewahrt und verarbeitet. Personen, die mit der
+    wissenschaftlichen Auswertung von Daten betraut sind, haben keinen Zugang zu der Zuordnungsliste. Personen, die die
+    Zuordnungsliste verwalten, wurden ausdrücklich zur Verschwiegenheit verpflichtet. Durch die Pseudonymisierung ist
+    sichergestellt, dass weder bei der wissenschaftlichen Auswertung noch bei wissenschaftlichen Veröffentlichungen Ihre
+    Identität bekannt wird. Die Daten werden ausschließlich für Forschungszwecke genutzt und nur für die Auswertung
+    gespeichert. Es sind keine Rückschlüsse auf einzelne Teilnehmer*innen möglich.
+</p>
+
+<p>
+    Anonymisierte Daten werden zur Gewährung der Transparenz in der Wissenschaft ggf. für eine Nachnutzung durch Dritte
+    im Open Science Framework (OSF; https://osf.io/) zur Verfügung gestellt. Anonymisieren bedeutet, dass jegliche
+    Möglichkeit auf Ihre Identität zu schließen aus den Daten entfernt wird. Das heißt, dass Ihre Decision Lab ID aus
+    dem Datensatz entfernt wird. Zweck, Art und Umfang dieser Nachnutzung sind zum gegenwärtigen Zeitpunkt noch nicht
+    absehbar.
+</p>
+
+<p>
+    Ihr Geldbetrag wird Ihnen in 2-3 Wochen nach Teilnahme überwiesen. Die entsprechenden Kontakt- und Kontodaten werden
+    getrennt von allen anderen genannten Daten verarbeitet und niemals zusammengeführt oder für andere Zwecke verwendet.
+    Eine Löschung aller, in dieser Studie erhobener, personenbezogener Daten ist nach Ablauf der gesetzlichen
+    Aufbewahrungsfrist von mindestens 10 Jahren vorgesehen. Der anonymisierte Datensatz bleibt auch nach Ablauf dieser
+    Frist zur weiteren Nutzung im OSF verfügbar. An dieser Studie können Sie nur teilnehmen, wenn sie mit der Teilnahme
+    und der oben beschriebenen Datenverarbeitung einverstanden sind. Den für diese Studie zuständigen
+    Datenschutzbeauftragten der Universität zu Köln, Alexander May, können Sie erreichen unter a.may@unikoeln.de.
+</p>
+
+<p>
+    Wenn Sie an dieser Studie teilnehmen, haben Sie bezüglich Ihrer personenbezogenen Daten folgende Rechte:
+</p>
+
+<ul>
+    <li>Auskunft vom Verantwortlichen über Ihre Daten</li>
+    <li>Berichtigung Ihrer Daten</li>
+    <li>Löschung Ihrer Daten</li>
+    <li>Einschränkung der Verarbeitung Ihrer Daten</li>
+    <li>Datenübertragbarkeit (d.h. Sie können einen modifizierbaren Export Ihrer Daten anfordern, der Ihnen ermöglicht
+        Ihre Daten selbst zu verarbeiten / weiterzugeben)</li>
+    <li>Widerspruch gegen die Verarbeitung Ihrer Daten</li>
+</ul>
+
+<p>
+    Sie haben das Recht, die Einwilligung jederzeit zu widerrufen. Der Widerruf wirkt aber nur in die Zukunft. Die auf
+    der Einwilligung beruhende Verarbeitung bis zum Zeitpunkt des Widerrufs bleibt also rechtmäßig. Wenn Sie diese
+    Rechte geltend machen wollen, wenden sich bitte an die oben genannten Studienverantwortlichen. Sie haben auch das
+    Recht sich an eine Aufsichtsbehörde zu wenden. Zuständig ist die Landesbeauftragte für Datenschutz und
+    Informationsfreiheit Nordrhein-Westfalen, Postfach 20 04 44, 40102 Düsseldorf (Tel.:0211/38424-0, E-Mail:
+    poststelle@ldi.nrw.de).
+</p>
+
+<p>
+    Einwilligungserklärung:<br>
+    Ich erkläre mich bereit, an der Studie „Entscheidungspräferenzen“ teilzunehmen und bin mit
+    der oben beschriebenen Verarbeitung meiner Daten einverstanden.
+</p>
+
+{% formfields %}
+
+{% next_button %}
+
+{% endblock %}

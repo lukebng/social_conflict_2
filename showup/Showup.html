@@ -1,0 +1,36 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+{% if role == 1 %}
+<h1><strong>Abschluss der Studie</strong></h1>
+<p>Leider haben Sie zu lange gebraucht. Die Studie ist somit an dieser Stelle beendet.
+    <br><br>Vielen Dank für Ihre Teilnahme!
+    Ziel dieser Studie ist es, zu untersuchen, ob Entscheidungen in sozialen Interaktionen konfliktbehaftet sind und welche Konsequenzen der wahrgenommene
+    Konflikt hat (z.B. die Bereitschaft zur erneuten Interaktion). Darüber hinaus wollen wir herausfinden, ob bestimmte
+    abgegebene Beträge zu einem größeren wahrgenommenen Konflikt führen. Uns interessiert außerdem, ob die
+    unterschiedlichen Spielerrollen die Situation unterschiedlich wahrnehmen. Wir bitten Sie, diese Details unseres
+    Forschungsprojekts nicht weiter zu kommunizieren, da wir sonst mit verfälschten Studienergebnissen rechnen müssen!
+</p>
+<p>
+    Vielen Dank für Ihre Unterstützung unserer Forschung! Bei weiteren Fragen wenden Sie sich gerne an die
+    Studienverantwortlichen: Iris Schneider (<a href="i.k.schneider@uni-koeln.de">i.k.schneider@uni-koeln.de</a>) und
+    Angela Dorrough (<a href="angela.dorrough@uni-koeln.de">angela.dorrough@uni-koeln.de</a>)
+</p>
+<p>
+    Die anonymisierten und aggregierten Daten können Sie nach Ablauf der Studie im Open Science Framework
+    einsehen (<a href="https://osf.io/74czy/">https://osf.io/74czy/</a>).
+</p>
+
+{% elif role == 2 %}
+<p>Die Ihnen zugeteilte Person hat keinen Betrag abgegeben oder die Studie vorzeitig abgebrochen.
+<br>
+Wir möchte Sie dennoch bitten die Fragen der folgenden Seite zu beantworten. Im Anschluss erhalten Sie eine Aufwandsentschädigung.<br>
+Bitte klicken Sie auf <strong>„weiter"</strong>, um zu den Fragen zu gelangen.
+</p>
+{% next_button %}
+{% endif %}
+{{ endblock }}

@@ -1,0 +1,76 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Verständnisfragen{% endblock %}
+
+{% block scripts %}
+
+<script>
+    document.querySelector('#helpbutton').addEventListener('click', helpfunction);
+
+	function helpfunction() {
+		document.getElementById("help").style.display = "block";
+		return;
+	};
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<p>
+   Person A sendet einen Betrag in Höhe von 50 Cent an Person B. Wie hoch ist Person A’s variabler Auszahlungsbetrag?
+</p>
+
+<p>
+    {% formfield player.q1 label="" %}
+</p>
+
+<p>
+    Person A sendet einen Betrag in Höhe von 0 Cent an Person B. Wie hoch ist Person A’s variabler Auszahlungsbetrag?
+</p>
+
+
+<p>
+    {% formfield player.q2 label="" %}
+</p>
+
+<p>
+    Person A sendet einen Betrag in Höhe von 100 Cent an Person B. Wie hoch ist Person A’s variabler Auszahlungsbetrag?
+</p>
+
+<p>
+    {% formfield player.q3 label="" %}
+</p>
+
+<style>
+div.help {
+    display: none
+}
+</style>
+
+<div style="display:none" id="help">
+<p><u>Instruktionen Wiederholung</u></p>
+<p>
+    In der folgenden Aufgabe gibt es zwei Rollen – Rolle A und Rolle B. Die Person in Rolle A darf 1 Euro zwischen sich
+    und Person B aufteilen. <br/>
+    <br/>
+    Person A kann also entscheiden, wie sie 1 Euro zwischen sich selbst und Person B aufteilen möchte. Person A kann
+    Person B dabei einen variablen ganzzahligen Betrag zwischen 0 und 100 Cent abgeben. Sollte sich Person A
+    beispielsweise dafür entscheiden, 50 Cent an Person B abzugeben, erhalten Person A und Person B jeweils einen Betrag
+    von 50 Cent. Sollte sich Person A dafür entscheiden, Person B 0 Cent abzugeben, erhält sie 100 Cent, während
+    Person B in diesem Fall 0 Cent erhält. Sollte sich Person A dafür entscheiden, Person B 100 Cent abzugeben, erhält
+    Person A 0 Cent, während Person B 100 Cent bekommt.<br/>
+    <br/>
+    Der Betrag, den die Person in Rolle A für sich und die Person in Rolle B festlegt, ist der Betrag, der den Personen
+    in den jeweiligen Rollen im Abschluss an die Studie als variabler Betrag ausgezahlt wird.<br/>
+</p>
+</div>
+
+<button id="helpbutton" type="button" class="otree-btn-next btn btn-primary">Hilfe</button>
+<br/>
+<br/>
+
+{% next_button %}
+
+{% endblock %}

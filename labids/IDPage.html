@@ -1,0 +1,17 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Decision Lab ID{% endblock %}
+
+{% block content %}
+
+Pseudonymisierung:
+
+<p>Bitte geben sie hier ihre 7-stellige Decision Lab ID zur Pseudonymisierung Ihrer Daten an. Diese haben Sie per Mail bei
+    Ihrer Registrierung am Decision Lab von uns erhalten.</p>
+<p>{% formfield player.DecisionLabId label=""%}</p>
+<p>Falls Sie ihre Decision Lab ID nicht mehr wissen, können Sie diese unter <a href="mailto:labids-dlc@uni-koeln.de">labids-dlc@uni-koeln.de</a> nachfragen.</p>
+
+{% next_button %}
+
+{% endblock %}

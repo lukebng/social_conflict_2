@@ -1,0 +1,30 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Instruktionen{% endblock %}
+
+{% block content %}
+<p>
+    In der folgenden Aufgabe gibt es zwei Rollen – Rolle A und Rolle B. Die Person in Rolle A darf 1 Euro zwischen sich
+    und Person B aufteilen. <br/>
+    <br/>
+    Person A kann also entscheiden, wie sie 1 Euro zwischen sich selbst und Person B aufteilen möchte. Person A kann
+    Person B dabei einen variablen ganzzahligen Betrag zwischen 0 und 100 Cent abgeben. Sollte sich Person A
+    beispielsweise dafür entscheiden, 50 Cent an Person B abzugeben, erhalten Person A und Person B jeweils einen Betrag
+    von 50 Cent. Sollte sich Person A dafür entscheiden, Person B 0 Cent abzugeben, erhält sie 100 Cent, während Person
+    B in diesem Fall 0 Cent erhält. Sollte sich Person A dafür entscheiden, Person B 100 Cent abzugeben, erhält Person A
+    0 Cent, während Person B 100 Cent bekommt.<br/>
+    <br/>
+    Der Betrag, den die Person in Rolle A für sich und die Person in Rolle B festlegt, ist der Betrag, der den Personen
+    in den jeweiligen Rollen im Abschluss an die Studie als variabler Betrag ausgezahlt wird.<br/>
+    <br/>
+    Im Folgenden bearbeiten Sie drei Verständnisfragen. Antworten Sie richtig, werden Sie mit dem Klick auf „weiter“
+    zum nächsten Teil der Studie geleitet. Antworten Sie falsch, haben Sie die Möglichkeit Ihre Antwort zu überdenken
+    und erneut anzugeben.<br/>
+    <br/>
+    Im Anschluss an die Verständnisfragen wird Ihnen eine der beiden Rollen zufällig zugeordnet.<br/>
+</p>
+
+{% next_button %}
+
+{% endblock %}

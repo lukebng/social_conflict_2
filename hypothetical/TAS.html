@@ -1,0 +1,244 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Entscheidungsaufgabe{% endblock %}
+
+{% block content %}
+<p>
+    Wir möchten sie abschließend bitten, <strong>anzugeben</strong>, inwiefern Sie den folgenden <strong>Aussagen zustimmen</strong>.
+    Klicken Sie dann auf <strong>„weiter“</strong>.
+</p>
+
+<p>
+    Meine Gedanken sind häufig widersprüchlich.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb1 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+<p>
+    Bezüglich vielen Themen empfinde / erlebe ich Konfliktzustände.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb2 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+<p>
+    Meistens sehe ich bei Dingen die positive als auch die negative Seite.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb3 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+<p>
+    Oft fühle ich mich, als würden beide Seiten eines Themas an mir ziehen.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb4 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+<p>
+    Oft stelle ich fest, dass es für alles Pros und Cons gibt.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb5 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+<p>
+    Oft fühle ich mich zwischen zwei Seiten eines Themas hin- und hergerissen.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb6 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+<p>
+    Häufig stimmen meine Gefühle und Gedanken nicht notwendigerweise miteinander überein.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb7 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+<p>
+    Manchmal fühlt es sich fast so an, als würde ich körperlich von Seite zu Seite wechseln, wenn ich über ein Thema nachdenke.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb8 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+<p>
+    Meine Gefühle sind oft gleichzeitig positiv und negativ.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb9 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+<p>
+    Wenn ich an ein Thema denke, erlebe ich oft einen Konflikt zwischen meinen Gedanken und Gefühlen.
+</p>
+    <table style="text-align:left">
+  <tr>
+    <td colspan="2">völlig <br/>
+        unzutreffend</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+      <td>&nbsp</td>
+    <td colspan="2">trifft ganz<br/>
+        genau zu
+    </td>
+  </tr>
+    <tr>
+        {% for choice in form.amb10 %}
+        <td style="padding: 10px 30px">{{ choice }}</td>
+        {% endfor %}
+        <td>&nbsp</td>
+    </tr>
+</table>
+
+{% next_button %}
+
+{% endblock %}
