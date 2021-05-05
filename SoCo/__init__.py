@@ -8,7 +8,7 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'SoCO'
     players_per_group = 2
-    num_rounds = 1
+    num_rounds = 2
     endowment = Currency(100)
     dictator_role = 'Dictator'
     recipient_role = 'Recipient'
@@ -35,7 +35,7 @@ def make_likert_7(label):
 
 
 class Group(BaseGroup):
-    pass
+    treat = models.StringField
 
 #define player model
 class Player(BasePlayer):
@@ -82,15 +82,28 @@ class Player(BasePlayer):
 
 
 # FUNCTIONS
+'''def creating_session(subsession):
+    if subsession.round_number == 2:
+        import itertools
+        treats = itertools.cycle(['random', 'same'])
+        for group in subsession.get_groups():
+            group.treat = next(treats)
+        for group in subsession.get_groups():
+            if group.treat == 'random':
+                subsession.group_randomly(fixed_id_in_group=True)
+            else:
+                subsession.group_like_round(1)'''
+
+
 #define function that sets the payoffs for players depending on whether a timeout occurred
 def set_payoffs(group: Group):
-        p1 = group.get_player_by_id(1)
-        p2 = group.get_player_by_id(2)
-        if p1.to:
-            p1.payoff = 0
-        else:
-            p1.payoff = 200 + Constants.endowment - p1.offer
-            p2.payoff = 200 + p1.offer
+    p1 = group.get_player_by_id(1)
+    p2 = group.get_player_by_id(2)
+    if p1.to:
+        p1.payoff = 0
+    else:
+        p1.payoff = 200 + Constants.endowment - p1.offer
+        p2.payoff = 200 + p1.offer
 
 #define a function that checks whether players are waiting too long
 def waiting_too_long(player):
@@ -100,16 +113,63 @@ def waiting_too_long(player):
 
 #define a function that groups players when they arrive at this app
 def group_by_arrival_time_method(subsession, waiting_players):
-    if len(waiting_players) >= 2:
-        p1 = waiting_players[0]
-        p2 = waiting_players[1]
-        p1.participant.role = 1
-        p2.participant.role = 2
-        return waiting_players[:2]
-    for player in waiting_players:
-        if waiting_too_long(player):
-            # make a single-player group.
-            return [player]
+    if subsession.round_number == 1:
+        if len(waiting_players) >= 2:
+            p1 = waiting_players[0]
+            p2 = waiting_players[1]
+            p1.participant.role = 1
+            p2.participant.role = 2
+            p1.participant.partner = p2.participant.label
+            p2.participant.partner = p1.participant.label
+            return waiting_players[:2]
+        for player in waiting_players:
+            if waiting_too_long(player):
+                # make a single-player group.
+                return [player]
+    elif subsession.round_number == 2:
+        randomgroupnumber = 0
+        samegroupnumber = 0
+        randomgroup1 = [None] * 2
+        samegroup1 = [None] * 2
+        randomgroup2 = [None] * 2
+        samegroup2 = [None] * 2
+
+
+        for p1 in range(len(waiting_players)):
+            for p2 in range(p1, len(waiting_players)):
+                if waiting_players[p1].participant.partner == waiting_players[p2].participant.label:
+                    if samegroupnumber == randomgroupnumber:
+                        if samegroupnumber == 0:
+                            samegroup1[0] = waiting_players[p1]
+                            samegroup1[1] = waiting_players[p2]
+                        elif samegroupnumber == 1:
+                            samegroup2[0] = waiting_players[p1]
+                            samegroup2[1] = waiting_players[p2]
+                        elif samegroupnumber == 2:
+                            return [samegroup1[0], samegroup1[1], samegroup2[0], samegroup2[1]]
+                        samegroupnumber = samegroupnumber + 1
+                    elif samegroupnumber > randomgroupnumber:
+                        if randomgroupnumber == 0:
+                            randomgroup1[0] = waiting_players[p1]
+                            randomgroup2[1] = waiting_players[p2]
+                        if randomgroupnumber == 1:
+                            randomgroup2[0] = waiting_players[p1]
+                            randomgroup1[1] = waiting_players[p2]
+                        if randomgroupnumber == 2:
+                            return [randomgroup1[0], randomgroup1[1], randomgroup2[0], randomgroup2[1]]
+                        randomgroupnumber = randomgroupnumber + 1
+                    elif samegroupnumber < randomgroupnumber:
+                        if samegroupnumber == 0:
+                            samegroup1[0] = waiting_players[p1]
+                            samegroup1[1] = waiting_players[p2]
+                        if samegroupnumber == 1:
+                            samegroup2[0] = waiting_players[p1]
+                            samegroup2[1] = waiting_players[p2]
+                        elif samegroupnumber == 2:
+                            return [samegroup1[0], samegroup1[1], samegroup2[0], samegroup2[1]]
+                        samegroupnumber = samegroupnumber + 1
+
+
 
 #define custom export for social conflict app
 def custom_export(players):
@@ -283,6 +343,10 @@ class Debriefing(Page):
             total_p1=p1.payoff.to_real_world_currency(player.session),
             total_p2=p2.payoff.to_real_world_currency(player.session),
         )
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 2
 
 
 page_sequence = [
