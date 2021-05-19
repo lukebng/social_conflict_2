@@ -6,7 +6,7 @@ SESSION_CONFIGS = [
         name='SoCo',
         display_name="Entscheidungsaufgabe",
         num_demo_participants=2,
-        app_sequence=['consent', 'labids', 'instructions', 'SoCo', 'hypothetical', 'showup', 'distribution', 'samegroup', 'randomgroup'],
+        app_sequence=['consent', 'labids', 'instructions', 'distribution', 'samegroup', 'randomgroup'],
         use_browser_bots=True,
     ),
 ]
@@ -50,4 +50,4 @@ SECRET_KEY = 'xj$ii$mrxjjtg)dz$-9ll&b#i5ac2!cguf!gj%z6e02a=1-cf_'
 
 INSTALLED_APPS = ['otree']
 
-PARTICIPANT_FIELDS = ['DecisionLabID', 'wait_page_arrival', 'role', 'partner']
+PARTICIPANT_FIELDS = ['DecisionLabID', 'wait_page_arrival', 'role', 'partner', 'treat']

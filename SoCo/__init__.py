@@ -10,7 +10,7 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'SoCO'
     players_per_group = 2
-    num_rounds = 2
+    num_rounds = 1
     endowment = Currency(100)
     dictator_role = 'Dictator'
     recipient_role = 'Recipient'
@@ -82,22 +82,7 @@ class Player(BasePlayer):
     amb9 = make_likert_7("")
     amb10 = make_likert_7("")
     fin = models.IntegerField(initial=0)
-
-
 # FUNCTIONS
-def creating_session(subsession):
-    if subsession.round_number == 2:
-        import itertools
-        treats = itertools.cycle(['random', 'same'])
-        for group in subsession.get_groups():
-            group.treat = next(treats)
-        for group in subsession.get_groups():
-            if group.treat == 'random':
-                subsession.group_randomly(fixed_id_in_group=True)
-            else:
-                subsession.group_like_round(1)
-
-
 #define function that sets the payoffs for players depending on whether a timeout occurred
 def set_payoffs(group: Group):
     p1 = group.get_player_by_id(1)
@@ -134,110 +119,6 @@ def group_by_arrival_time_method(subsession, waiting_players):
             if waiting_too_long(player):
                 # make a single-player group.
                 return [player]
-    elif subsession.round_number == 2:
-        group1 = []
-        group2 = []
-        delete1 = 0
-        delete2 = 0
-        if len(waiting_players) > 3:
-            if not Subsession.builtsame:
-                if Subsession.groupnumber == 0:
-                    for i in range(len(waiting_players)):
-                        for j in range(len(waiting_players)):
-                            if waiting_players[i].participant.partner == waiting_players[j].participant.label and i != j:
-                                print('p1  has label ', waiting_players[i].participant.label)
-                                print('partner of p1 is ', waiting_players[i].participant.partner)
-                                print('p2  has label ', waiting_players[j].participant.label)
-                                print('partner of p2 is', waiting_players[j].participant.partner)
-                                print('groupnumber is ', Subsession.groupnumber)
-                                group1.append(waiting_players[i])
-                                group1.append(waiting_players[j])
-                                delete1 = waiting_players[i]
-                                delete2 = waiting_players[j]
-                                Subsession.groupnumber = Subsession.groupnumber + 1
-                                print('waiting_players are ', waiting_players)
-                                print('first in samegroup 1 is ', group1[0].participant.label)
-                                print('second in samegroup 1 is ', group1[1].participant.label)
-                                break
-                        else:
-                            continue
-                        break
-                    waiting_players.remove(delete1)
-                    waiting_players.remove(delete2)
-                elif Subsession.groupnumber == 1:
-                    for i in range(len(waiting_players)):
-                        for j in range(len(waiting_players)):
-                            if waiting_players[i].participant.partner == waiting_players[j].participant.label and i != j:
-                                print('p1  has label ', waiting_players[i].participant.label)
-                                print('partner of p1 is ', waiting_players[i].participant.partner)
-                                print('p2  has label ', waiting_players[j].participant.label)
-                                print('partner of p2 is', waiting_players[j].participant.partner)
-                                print('groupnumber is ', Subsession.groupnumber)
-                                group2.append(waiting_players[i])
-                                group2.append(waiting_players[j])
-                                delete1 = waiting_players[i]
-                                delete2 = waiting_players[j]
-                                Subsession.groupnumber = 0
-                                print('waiting_players are ', waiting_players)
-                                print('first in samegroup 2 is ', group2[0].participant.label)
-                                print('second in samegroup 2 is ', group2[1].participant.label)
-                                Subsession.builtsame = True
-                                break
-                        else:
-                            continue
-                        break
-                    waiting_players.remove(delete1)
-                    waiting_players.remove(delete2)
-                    return [group1[0], group1[1], group2[0], group2[1]]
-            elif Subsession.builtsame:
-                if Subsession.groupnumber == 0:
-                    for i in range(len(waiting_players)):
-                        for j in range(len(waiting_players)):
-                            if waiting_players[i].participant.partner == waiting_players[j].participant.label and i != j:
-                                print('p1  has label ', waiting_players[i].participant.label)
-                                print('partner of p1 is ', waiting_players[i].participant.partner)
-                                print('p2  has label ', waiting_players[j].participant.label)
-                                print('partner of p2 is', waiting_players[j].participant.partner)
-                                print('groupnumber is ', Subsession.groupnumber)
-                                group1.append(waiting_players[i])
-                                group2.append(waiting_players[j])
-                                delete1 = waiting_players[i]
-                                delete2 = waiting_players[j]
-                                Subsession.groupnumber = Subsession.groupnumber + 1
-                                print('waiting_players are ', waiting_players)
-                                print('first in randomgroup 1 is ', group1[0].participant.label)
-                                print('first in randomgroup 2 is ', group2[0].participant.label)
-                                break
-                        else:
-                            continue
-                        break
-                    waiting_players.remove(delete1)
-                    waiting_players.remove(delete2)
-                elif Subsession.groupnumber == 1:
-                    for i in range(len(waiting_players)):
-                        for j in range(len(waiting_players)):
-                            if waiting_players[i].participant.partner == waiting_players[j].participant.label and i != j:
-                                print('p1  has label ', waiting_players[i].participant.label)
-                                print('partner of p1 is ', waiting_players[i].participant.partner)
-                                print('p2  has label ', waiting_players[j].participant.label)
-                                print('partner of p2 is', waiting_players[j].participant.partner)
-                                print('groupnumber is ', Subsession.groupnumber)
-                                group2.append(waiting_players[i])
-                                group1.append(waiting_players[j])
-                                delete1 = waiting_players[i]
-                                delete2 = waiting_players[j]
-                                Subsession.groupnumber = 0
-                                print('waiting_players are ', waiting_players)
-                                print('second in randomgroup 1 is ', group1[1].participant.label)
-                                print('second in randomgroup 2 is ', group2[1].participant.label)
-                                Subsession.builtsame = True
-                                break
-                        else:
-                            continue
-                        break
-                    waiting_players.remove(delete1)
-                    waiting_players.remove(delete2)
-                    return [group1[0], group1[1], group2[0], group2[1]]
 
 
 #define custom export for social conflict app
@@ -401,8 +282,6 @@ class TAS(Page):
         player.fin = 1
 
 
-
-
 class Debriefing(Page):
     @staticmethod
     def vars_for_template(player: Player):
@@ -414,10 +293,6 @@ class Debriefing(Page):
             total_p1=p1.payoff.to_real_world_currency(player.session),
             total_p2=p2.payoff.to_real_world_currency(player.session),
         )
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.round_number == 2
 
 
 page_sequence = [

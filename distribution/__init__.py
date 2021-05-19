@@ -1,4 +1,5 @@
 from otree.api import *
+import itertools
 
 c = Currency
 
@@ -25,34 +26,23 @@ class Player(BasePlayer):
     pass
 
 
-def group_by_arrival_time_method(subsession, waiting_players):
-    import itertools
+def creating_session(subsession):
     treats = itertools.cycle(['random', 'same'])
-    for p1 in waiting_players:
-        for p2 in waiting_players:
-            if p1.participant.partner == p2.participant.label:
-                p1.treat = next(treats)
-                p2.treat = p1.treat
-                return [p1, p2]
+    for player in subsession.get_players():
+        player.participant.treat = next(treats)
 
 
 # PAGES
 class GroupingWaitPage(WaitPage):
-    group_by_arrival_time = True
 
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
-        if player.treat == 'random':
-            upcoming_apps[randomgroup]
-        elif player.treat == 'same'
+        if player.participant.treat == 'random':
+            print("participant ", player.participant.label, " has treat ", player.participant.treat)
+            return "randomgroup"
+        elif player.participant.treat == 'same':
+            print("participant ", player.participant.label, " has treat ", player.participant.treat)
+            return "samegroup"
 
 
-class ResultsWaitPage(WaitPage):
-    pass
-
-
-class Results(Page):
-    pass
-
-
-page_sequence = [GroupingWaitPage, ResultsWaitPage, Results]
+page_sequence = [GroupingWaitPage]
