@@ -129,6 +129,10 @@ def custom_export(players):
 class GroupingWaitPage(WaitPage):
     group_by_arrival_time = True
 
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 1
+
 
 class PlayerA_Offer(Page):
     form_model = 'player'
@@ -143,7 +147,7 @@ class PlayerA_Offer(Page):
             player.to = True
         else:
             player.to = False
-            print("In round ", player.round_number, "player ", player.participant.label, " is in group with ",
+            print("SaCo: In round ", player.round_number, "player ", player.participant.label, " is in group with ",
                  player.get_others_in_group()[0].participant.label)
 
     #function that makes sure to just display page to dictators
@@ -266,6 +270,10 @@ class Debriefing(Page):
             total_p1=p1.payoff.to_real_world_currency(player.session),
             total_p2=p2.payoff.to_real_world_currency(player.session),
         )
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 2
 
 
 page_sequence = [

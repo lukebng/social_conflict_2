@@ -11,7 +11,7 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'RaCo'
     players_per_group = 2
-    num_rounds = 1
+    num_rounds = 2
     endowment = Currency(100)
     dictator_role = 'Dictator'
     recipient_role = 'Recipient'
@@ -89,19 +89,34 @@ class Player(BasePlayer):
 
 # FUNCTIONS
 
-
-def creating_session(subsession):
-    if subsession.round_number == 2:
-        m = subsession.get_group_matrix()
-        n = make_matrix(len(m), 1)
-        subsession.set_group_matrix(n)
-
-
-def make_matrix(n_players, offset):
-    p1s = list(range(1, n_players // 2))
-    p2s = list(range(n_players // 2, n_players + 1))
-
-    return list(zip(p1s, p2s[offset:] + p2s[:offset]))
+def group_by_arrival_time_method(subsession, waiting_players):
+    if subsession.round_number == 1:
+        if len(waiting_players) >= 2:
+            p1 = waiting_players[0]
+            p2 = waiting_players[1]
+            p1.participant.role = 1
+            p2.participant.role = 2
+            print('label of player is ', p1.participant.label)
+            print('label of player is ', p2.participant.label)
+            p1.participant.partner = p2.participant.label
+            p2.participant.partner = p1.participant.label
+            print('partner of p1 is ', p1.participant.partner)
+            print('partner of p2 is ', p2.participant.partner)
+            return waiting_players[:2]
+        for player in waiting_players:
+            if waiting_too_long(player):
+                # make a single-player group.
+                return [player]
+    elif subsession.round_number == 2:
+        print('in group_by_arrival_time_method')
+        d_players = [p for p in waiting_players if p.participant.role == 1]
+        r_players = [p for p in waiting_players if p.participant.role == 2]
+        if len(waiting_players) >= 1:
+            if len(d_players) >= 1 and len(r_players) >= 1:
+                for i in range(len(d_players)):
+                    for j in range(len(r_players)):
+                        if d_players[i].participant.partner != r_players[j].participant.label:
+                            return d_players[i], r_players[j]
 
 
 #define function that sets the payoffs for players depending on whether a timeout occurred
@@ -138,33 +153,47 @@ def custom_export(players):
                p.p_a_50, p.p_a_o_50, p.payoff, p.to, session.code, participant.id_in_session, p.group, participant.code, p.fin]
 
 
-def group_by_arrival_time_method(subsession, waiting_players):
-    if len(waiting_players) >= 2:
-        p1 = waiting_players[0]
-        p2 = waiting_players[1]
-        p1.participant.role = 1
-        p2.participant.role = 2
-        print('label of player is ', p1.participant.label)
-        print('label of player is ', p2.participant.label)
-        p1.participant.partner = p2.participant.label
-        p2.participant.partner = p1.participant.label
-        print('partner of p1 is ', p1.participant.partner)
-        print('partner of p2 is ', p2.participant.partner)
-        return waiting_players[:2]
-    for player in waiting_players:
-        if waiting_too_long(player):
-            # make a single-player group.
-            return [player]
+'''def group_by_arrival_time_method(subsession, waiting_players):
+    if subsession.round_number == 1:
+        if len(waiting_players) >= 2:
+            p1 = waiting_players[0]
+            p2 = waiting_players[1]
+            p1.participant.role = 1
+            p2.participant.role = 2
+            print('label of player is ', p1.participant.label)
+            print('label of player is ', p2.participant.label)
+            p1.participant.partner = p2.participant.label
+            p2.participant.partner = p1.participant.label
+            print('partner of p1 is ', p1.participant.partner)
+            print('partner of p2 is ', p2.participant.partner)
+            return waiting_players[:2]
+        for player in waiting_players:
+            if waiting_too_long(player):
+                # make a single-player group.
+                return [player]
+    elif subsession.round_number == 2:
+        wait_for_all_groups = '''
+
 # PAGES
 
 #page for the dictator to make an offer
-
 class GroupingWaitPage(WaitPage):
     group_by_arrival_time = True
 
+    #method that redirects players when odd number
     @staticmethod
-    def before_next_page(player, timeout_happened):
-        if player.round_number == 2:
+    def app_after_this_page(player, upcoming_apps):
+        group = player.group
+        if len(group.get_players()) == 1:
+            return upcoming_apps[0]
+
+    #method that changes the text of the waitpage
+    @staticmethod
+    def vars_for_template(player: Player):
+        return {
+            'body_text': "Ihnen wird nun eine Person zugeteilt. Sobald die nächste Person eintrifft, geht es los.",
+            'title_text': "Bitte warten Sie.",
+        }
 
 
 class PlayerA_Offer(Page):
@@ -180,7 +209,7 @@ class PlayerA_Offer(Page):
             player.to = True
         else:
             player.to = False
-            print("In round ", player.round_number, "player ", player.participant.label, " is in group with ",
+            print("RaCo: In round ", player.round_number, "player ", player.participant.label, " is in group with ",
                   player.get_others_in_group()[0].participant.label)
 
     #function that makes sure to just display page to dictators
@@ -304,8 +333,13 @@ class Debriefing(Page):
             total_p2=p2.payoff.to_real_world_currency(player.session),
         )
 
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 2
+
 
 page_sequence = [
+    GroupingWaitPage,
     PlayerA_Offer,
     ResultsWaitPage,
     PlayerA_CBG,

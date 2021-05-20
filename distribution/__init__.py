@@ -27,13 +27,13 @@ class Player(BasePlayer):
 
 
 def creating_session(subsession):
-    treats = itertools.cycle(['random', 'same'])
+    treats = itertools.cycle(['random', 'random', 'same', 'same'])
     for player in subsession.get_players():
         player.participant.treat = next(treats)
 
 
 # PAGES
-class GroupingWaitPage(WaitPage):
+class WaitPage1(WaitPage):
 
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
@@ -45,4 +45,4 @@ class GroupingWaitPage(WaitPage):
             return "samegroup"
 
 
-page_sequence = [GroupingWaitPage]
+page_sequence = [WaitPage1]
