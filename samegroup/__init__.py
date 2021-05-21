@@ -82,7 +82,8 @@ class Player(BasePlayer):
     amb8 = make_likert_7("")
     amb9 = make_likert_7("")
     amb10 = make_likert_7("")
-    fin = models.IntegerField(initial=0)
+    fin1 = models.IntegerField(initial=0)
+    fin2 = models.IntegerField(initial=0)
 
 
 # FUNCTIONS
@@ -280,7 +281,10 @@ class TAS(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.fin = 1
+        if player.round_number == 1:
+            player.fin1 = 1
+        elif player.round_number == 2:
+            player.fin2 = 1
 
 
 class Debriefing(Page):
@@ -299,8 +303,8 @@ class Debriefing(Page):
             offer1=offer1,
             kept2=kept2,
             offer2=offer2,
-            total_kept=(kept1+kept2).to_real_world_currency,
-            total_offer=(offer1+offer2).to_real_world_currency,
+            total_kept=kept1+kept2,
+            total_offer=offer1+offer2,
             total_p1=p1.participant.payoff.to_real_world_currency(player.session),
             total_p2=p2.participant.payoff.to_real_world_currency(player.session),
         )
