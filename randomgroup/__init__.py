@@ -96,8 +96,6 @@ def group_by_arrival_time_method(subsession, waiting_players):
             p2 = waiting_players[1]
             p1.participant.role = 1
             p2.participant.role = 2
-            print('label of player is ', p1.participant.label)
-            print('label of player is ', p2.participant.label)
             p1.participant.partner = p2.participant.label
             p2.participant.partner = p1.participant.label
             print('partner of p1 is ', p1.participant.partner)
@@ -108,7 +106,6 @@ def group_by_arrival_time_method(subsession, waiting_players):
                 # make a single-player group.
                 return [player]
     elif subsession.round_number == 2:
-        print('in group_by_arrival_time_method')
         d_players = [p for p in waiting_players if p.participant.role == 1]
         r_players = [p for p in waiting_players if p.participant.role == 2]
         if len(waiting_players) >= 1:
@@ -117,6 +114,10 @@ def group_by_arrival_time_method(subsession, waiting_players):
                     for j in range(len(r_players)):
                         if d_players[i].participant.partner != r_players[j].participant.label:
                             return d_players[i], r_players[j]
+        for player in waiting_players:
+            if waiting_too_long(player):
+                # make a single-player group.
+                return [player]
 
 
 #define function that sets the payoffs for players depending on whether a timeout occurred
@@ -126,8 +127,18 @@ def set_payoffs(group: Group):
     if p1.to:
         p1.payoff = 0
     else:
-        p1.payoff = Constants.endowment - p1.offer
-        p2.payoff = p1.offer
+        if p1.round_number == 1:
+            p1.payoff = 200 + Constants.endowment - p1.offer
+            p2.payoff = 200 + p1.offer
+        elif p1.round_number == 2:
+            p1.payoff = Constants.endowment - p1.offer
+            p2.payoff = p1.offer
+
+
+def offer_error_message(player, value):
+    if value % 20 != 0:
+        return 'Sie können nur die folgenden Beträge an die Person abgeben: 0, 20, 40, 60, 80 oder 100 Cent.'
+
 
 #define a function that checks whether players are waiting too long
 def waiting_too_long(player):
@@ -153,29 +164,7 @@ def custom_export(players):
                p.p_a_50, p.p_a_o_50, p.payoff, p.to, session.code, participant.id_in_session, p.group, participant.code, p.fin]
 
 
-'''def group_by_arrival_time_method(subsession, waiting_players):
-    if subsession.round_number == 1:
-        if len(waiting_players) >= 2:
-            p1 = waiting_players[0]
-            p2 = waiting_players[1]
-            p1.participant.role = 1
-            p2.participant.role = 2
-            print('label of player is ', p1.participant.label)
-            print('label of player is ', p2.participant.label)
-            p1.participant.partner = p2.participant.label
-            p2.participant.partner = p1.participant.label
-            print('partner of p1 is ', p1.participant.partner)
-            print('partner of p2 is ', p2.participant.partner)
-            return waiting_players[:2]
-        for player in waiting_players:
-            if waiting_too_long(player):
-                # make a single-player group.
-                return [player]
-    elif subsession.round_number == 2:
-        wait_for_all_groups = '''
-
 # PAGES
-
 #page for the dictator to make an offer
 class GroupingWaitPage(WaitPage):
     group_by_arrival_time = True
@@ -324,13 +313,23 @@ class TAS(Page):
 class Debriefing(Page):
     @staticmethod
     def vars_for_template(player: Player):
+        prev_player = player.in_round(player.round_number - 1)
+        pp1 = prev_player.group.get_player_by_id(1)
         p1 = player.group.get_player_by_id(1)
         p2 = player.group.get_player_by_id(2)
+        kept1 = (Constants.endowment - pp1.offer).to_real_world_currency(player.session)
+        offer1 = pp1.offer.to_real_world_currency(player.session)
+        kept2 = (Constants.endowment - p1.offer).to_real_world_currency(player.session)
+        offer2 = p1.offer.to_real_world_currency(player.session)
         return dict(
-            kept=(Constants.endowment - p1.offer).to_real_world_currency(player.session),
-            offer=p1.offer.to_real_world_currency(player.session),
-            total_p1=p1.payoff.to_real_world_currency(player.session),
-            total_p2=p2.payoff.to_real_world_currency(player.session),
+            kept1=kept1,
+            offer1=offer1,
+            kept2=kept2,
+            offer2=offer2,
+            total_kept=(kept1 + kept2).to_real_world_currency,
+            total_offer=(offer1 + offer2).to_real_world_currency,
+            total_p1=p1.participant.payoff.to_real_world_currency(player.session),
+            total_p2=p2.participant.payoff.to_real_world_currency(player.session),
         )
 
     @staticmethod

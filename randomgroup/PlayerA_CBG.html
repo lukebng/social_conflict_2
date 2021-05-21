@@ -7,9 +7,17 @@
 
 <p>Sie haben der Person B {{ offer }} abgegeben und <strong>{{ kept }}</strong> für sich behalten.</p>
 
+{% if player.round_number == 1 %}
 <p>
     Bitte <strong>beantworten</strong> Sie die folgenden <strong>Fragen</strong>. Klicken Sie dann auf <strong>„weiter“</strong>.
 </p>
+{% endif %}
+
+{% if player.round_number == 2 %}
+<p>
+    Bitte <strong>beantworten</strong> Sie nun wieder die folgenden <strong>Fragen</strong>. Klicken Sie dann auf <strong>„weiter“</strong>.
+</p>
+{% endif %}
 
 <p>
     In welchem Maß empfinden Sie einen Konflikt bezüglich des von Ihnen gesendeten Betrags?

@@ -5,8 +5,25 @@
 
 {% block content %}
 <p>
+    {% if player.round_number == 1 %}
+    Ihnen wurde zufällig die Rolle B zugewiesen. Sie werden im Folgenden zwei Runden spielen. Sie
+    werden dabei zweimal mit der Ihnen zugeordneten Person A interagieren. Für jede Interaktion erhält Person A einen
+    Betrag von 1 Euro, den sie aufteilen kann. <br/>
+    <br/>
     Person A hat {{ kept }} für sich behalten. Damit haben Sie <strong>{{ offer }}</strong> von Person A erhalten.<br>
-    Bitte <strong>beantworten</strong> Sie die folgenden <strong>Fragen</strong>. Klicken Sie dann auf <strong>„weiter“</strong>.
+    Bitte <strong>beantworten</strong> Sie die folgenden <strong>Fragen</strong>. Klicken Sie dann auf
+    <strong>„weiter“</strong>.
+{% endif %}
+
+{% if player.round_number == 2 %}
+    Ihnen wurde nun dieselbe Person wie in der ersten Runde zugeteilt.
+    <br/>
+    Person A hat {{ kept }} für sich behalten. Damit haben Sie <strong>{{ offer }}</strong> von Person A erhalten.<br>
+    Bitte <strong>beantworten</strong> Sie nun wieder die folgenden <strong>Fragen</strong>. Klicken Sie dann auf
+    <strong>„weiter“</strong>.
+{% endif %}
+
+
 </p>
 
 <p>
