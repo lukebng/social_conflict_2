@@ -74,60 +74,6 @@
     </tr>
 </table>
 
-<p>
-    Würden Sie nochmal mit dieser Person spielen?
-</p>
-
-    <table>
-  <tr>
-    <td colspan="2">sehr <br/>
-        unwahrscheinlich</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-    <td colspan="2">sehr <br/>
-        wahrscheinlich
-    </td>
-  </tr>
-    <tr>
-        {% for choice in form.p_a %}
-        <td style="padding: 10px 30px">{{ choice }}</td>
-        {% endfor %}
-        <td>&nbsp</td>
-    </tr>
-</table>
-
-<p>
-    Würden Sie nochmal mit einer anderen Person spielen?
-</p>
-
-    <table>
-  <tr>
-    <td colspan="2">sehr <br/>
-        unwahrscheinlich</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-      <td>&nbsp</td>
-        <td colspan="2">sehr <br/>
-        wahrscheinlich
-    </td>
-  </tr>
-    <tr>
-        {% for choice in form.p_a_o %}
-        <td style="padding: 10px 30px">{{ choice }}</td>
-        {% endfor %}
-        <td>&nbsp</td>
-    </tr>
-</table>
-
 {% next_button %}
 
 {% endblock %}

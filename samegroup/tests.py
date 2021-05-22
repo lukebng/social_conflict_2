@@ -103,5 +103,4 @@ class PlayerBot(Bot):
                 expect(self.player.amb8, 6)
                 expect(self.player.amb9, 3)
                 expect(self.player.amb10, 7)
-                yield Debriefing
                 expect(self.player.participant.payoff, self.player.payoff + self.player.in_round(1).payoff)

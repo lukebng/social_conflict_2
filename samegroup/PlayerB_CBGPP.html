@@ -103,6 +103,8 @@
     </tr>
 </table>
 
+{% if player.round_number == 1 %}
+
 <p>
     Würden Sie nochmal mit dieser Person spielen?
 </p>
@@ -154,6 +156,8 @@
         <td>&nbsp</td>
     </tr>
 </table>
+
+{% endif %}
 
 {% next_button %}
 

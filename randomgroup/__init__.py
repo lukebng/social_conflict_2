@@ -290,22 +290,6 @@ class PlayerB_Alt50(Page):
     def is_displayed(player: Player):
         return player.role == Constants.recipient_role
 
-
-class TAS(Page):
-    form_model = 'player'
-    form_fields = [
-        'amb1',
-        'amb2',
-        'amb3',
-        'amb4',
-        'amb5',
-        'amb6',
-        'amb7',
-        'amb8',
-        'amb9',
-        'amb10',
-    ]
-
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         if player.round_number == 1:
