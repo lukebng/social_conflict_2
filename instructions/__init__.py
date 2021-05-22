@@ -1,4 +1,5 @@
 from otree.api import *
+import itertools
 
 doc = """
 Your app description
@@ -6,7 +7,7 @@ Your app description
 
 
 class Constants(BaseConstants):
-    name_in_url = 'EnvyInstructions'
+    name_in_url = 'Instructions'
     players_per_group = None
     num_rounds = 1
 
@@ -36,6 +37,7 @@ class Player(BasePlayer):
 class Instructions(Page):
     pass
 
+treats = itertools.cycle(['random', 'same'])
 
 class Understanding(Page):
     form_model = 'player'
@@ -61,6 +63,16 @@ class Understanding(Page):
     def before_next_page(player: Player, timeout_happened):
         import time
         player.participant.wait_page_arrival = time.time()
+
+    @staticmethod
+    def app_after_this_page(player: Player, upcoming_apps):
+        player.participant.treat = next(treats)
+        if player.participant.treat == 'random':
+            print("participant ", player.participant.label, " has treat ", player.participant.treat)
+            return "randomgroup"
+        elif player.participant.treat == 'same':
+            print("participant ", player.participant.label, " has treat ", player.participant.treat)
+            return "samegroup"
 
 
 page_sequence = [Instructions, Understanding]

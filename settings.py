@@ -6,7 +6,7 @@ SESSION_CONFIGS = [
         name='SoCo',
         display_name="Entscheidungsaufgabe",
         num_demo_participants=2,
-        app_sequence=['consent', 'labids', 'instructions', 'distribution', 'samegroup', 'randomgroup'],
+        app_sequence=['consent', 'labids', 'instructions', 'samegroup', 'randomgroup'],
         use_browser_bots=True,
     ),
 ]

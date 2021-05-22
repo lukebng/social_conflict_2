@@ -119,6 +119,8 @@ def group_by_arrival_time_method(subsession, waiting_players):
             if waiting_too_long(player):
                 # make a single-player group.
                 return [player]
+    if subsession.round_number == 2:
+
 
 
 #define custom export for social conflict app
