@@ -45,8 +45,6 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     #define offer variable that saves dictator's tranfer
     offer = models.CurrencyField(min=0, max=Constants.endowment, label="")
-    #define timeout variable that states if a timeout occured
-    to = models.BooleanField(initial=False)
     #define variables for social conflict items
     confl = make_likert("")
     bad = make_likert("")
@@ -72,16 +70,6 @@ class Player(BasePlayer):
     p_a_o_25 = make_likert("")
     p_a_o_50 = make_likert("")
     #define trait ambivalence scale items
-    amb1 = make_likert_7("")
-    amb2 = make_likert_7("")
-    amb3 = make_likert_7("")
-    amb4 = make_likert_7("")
-    amb5 = make_likert_7("")
-    amb6 = make_likert_7("")
-    amb7 = make_likert_7("")
-    amb8 = make_likert_7("")
-    amb9 = make_likert_7("")
-    amb10 = make_likert_7("")
     fin1 = models.IntegerField(initial=0)
     fin2 = models.IntegerField(initial=0)
 
@@ -153,6 +141,12 @@ class GroupingWaitPage(WaitPage):
     def is_displayed(player: Player):
         return player.round_number == 1
 
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        import time
+        player.participant.wait_page_arrival = time.time()
+        player.participant.timeout = False
+
 
 class PlayerA_Offer(Page):
     form_model = 'player'
@@ -164,9 +158,8 @@ class PlayerA_Offer(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
         if timeout_happened:
-            player.to = True
+            player.participant.timeout = True
         else:
-            player.to = False
             print("SaCo: In round ", player.round_number, "player ", player.participant.label, " is in group with ",
                  player.get_others_in_group()[0].participant.label)
 
@@ -182,6 +175,8 @@ class ResultsWaitPage(WaitPage):
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
         if waiting_too_long(player):
+            return "showup"
+        if player.participant.timeout:
             return "showup"
 
     @staticmethod

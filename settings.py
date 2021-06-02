@@ -50,4 +50,4 @@ SECRET_KEY = 'xj$ii$mrxjjtg)dz$-9ll&b#i5ac2!cguf!gj%z6e02a=1-cf_'
 
 INSTALLED_APPS = ['otree']
 
-PARTICIPANT_FIELDS = ['DecisionLabID', 'wait_page_arrival', 'role', 'partner', 'treat']
+PARTICIPANT_FIELDS = ['DecisionLabID', 'wait_page_arrival', 'role', 'partner', 'treat', 'timeout']
