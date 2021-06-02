@@ -136,16 +136,11 @@ def set_payoffs(group: Group):
             p2.payoff = p1.offer
 
 
-def offer_error_message(player, value):
-    if value % 20 != 0:
-        return 'Sie können nur die folgenden Beträge an die Person abgeben: 0, 20, 40, 60, 80 oder 100 Cent.'
-
-
 #define a function that checks whether players are waiting too long
 def waiting_too_long(player):
     participant = player.participant
     import time
-    return time.time() - participant.wait_page_arrival > 180
+    return time.time() - participant.wait_page_arrival > 300
 
 
 #define custom export for social conflict app
@@ -170,12 +165,17 @@ def custom_export(players):
 class GroupingWaitPage(WaitPage):
     group_by_arrival_time = True
 
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        import time
+        player.participant.wait_page_arrival = time.time()
+
     #method that redirects players when odd number
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
         group = player.group
         if len(group.get_players()) == 1:
-            return upcoming_apps[0]
+            return "showup"
 
     #method that changes the text of the waitpage
     @staticmethod
@@ -190,7 +190,7 @@ class PlayerA_Offer(Page):
     form_model = 'player'
     form_fields = ['offer']
 
-    timeout_seconds = 180
+    timeout_seconds = 300
 
     #checks whether timeout happened and sets timeout variable to true if so
     @staticmethod
@@ -214,7 +214,9 @@ class ResultsWaitPage(WaitPage):
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
         if waiting_too_long(player):
-            return upcoming_apps[-1]
+            return "showup"
+        if player.to:
+            return "showup"
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -294,6 +296,8 @@ class PlayerB_Alt50(Page):
     def before_next_page(player: Player, timeout_happened):
         if player.round_number == 1:
             player.fin1 = 1
+            import time
+            player.participant.wait_page_arrival = time.time()
         elif player.round_number == 2:
             player.fin2 = 1
 

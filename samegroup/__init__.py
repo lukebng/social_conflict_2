@@ -103,16 +103,11 @@ def set_payoffs(group: Group):
             p2.payoff = p1.offer
 
 
-def offer_error_message(player, value):
-    if value % 20 != 0:
-        return 'Sie können nur die folgenden Beträge an die Person abgeben: 0, 20, 40, 60, 80 oder 100 Cent.'
-
-
 #define a function that checks whether players are waiting too long
 def waiting_too_long(player):
     participant = player.participant
     import time
-    return time.time() - participant.wait_page_arrival > 180
+    return time.time() - participant.wait_page_arrival > 300
 
 
 #define custom export for social conflict app
@@ -163,7 +158,7 @@ class PlayerA_Offer(Page):
     form_model = 'player'
     form_fields = ['offer']
 
-    timeout_seconds = 180
+    timeout_seconds = 300
 
     #checks whether timeout happened and sets timeout variable to true if so
     @staticmethod
@@ -187,7 +182,7 @@ class ResultsWaitPage(WaitPage):
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
         if waiting_too_long(player):
-            return upcoming_apps[-1]
+            return "showup"
 
     @staticmethod
     def vars_for_template(player: Player):
