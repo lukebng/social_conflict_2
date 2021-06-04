@@ -63,6 +63,7 @@ class Understanding(Page):
     def before_next_page(player: Player, timeout_happened):
         import time
         player.participant.wait_page_arrival = time.time()
+        player.participant.timo = False
 
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):

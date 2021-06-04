@@ -6,8 +6,8 @@ SESSION_CONFIGS = [
         name='SoCo',
         display_name="Entscheidungsaufgabe",
         num_demo_participants=2,
-        app_sequence=['consent', 'labids', 'instructions', 'samegroup', 'randomgroup'],
-        use_browser_bots=True,
+        app_sequence=['consent', 'labids', 'instructions', 'samegroup', 'randomgroup', 'showup'],
+        use_browser_bots=False,
     ),
 ]
 
@@ -17,7 +17,7 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=0.01, participation_fee=0.00, doc=""
+    real_world_currency_per_point=0.01, participation_fee=2.00, doc=""
 )
 
 # ISO-639 code
@@ -50,4 +50,4 @@ SECRET_KEY = 'xj$ii$mrxjjtg)dz$-9ll&b#i5ac2!cguf!gj%z6e02a=1-cf_'
 
 INSTALLED_APPS = ['otree']
 
-PARTICIPANT_FIELDS = ['DecisionLabID', 'wait_page_arrival', 'role', 'partner', 'treat', 'timeout']
+PARTICIPANT_FIELDS = ['DecisionLabID', 'wait_page_arrival', 'role', 'partner', 'treat', 'timo']

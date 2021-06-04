@@ -48,8 +48,8 @@ class Showup(Page):
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
-            total_earnings=player.payoff.to_real_world_currency(player.session),
-            timeout=player.participant.timeout,
+            total_earnings=player.participant.payoff_plus_participation_fee().to_real_world_currency(player.session),
+            timeout=player.participant.vars.get('timo'),
         )
 
 
