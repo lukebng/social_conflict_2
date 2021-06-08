@@ -12,8 +12,6 @@ class Constants(BaseConstants):
     players_per_group = 2
     num_rounds = 2
     endowment = Currency(100)
-    dictator_role = 'Dictator'
-    recipient_role = 'Recipient'
 
 
 class Subsession(BaseSubsession):
@@ -89,10 +87,14 @@ def group_by_arrival_time_method(subsession, waiting_players):
     elif subsession.round_number == 2:
         d_players = [p for p in waiting_players if p.participant.role == 1]
         r_players = [p for p in waiting_players if p.participant.role == 2]
+        print(d_players)
+        print(r_players)
         if len(waiting_players) >= 1:
             if len(d_players) >= 1 and len(r_players) >= 1:
                 for i in range(len(d_players)):
                     for j in range(len(r_players)):
+                        print('i is ', i)
+                        print('j is ', j)
                         if d_players[i].participant.partner != r_players[j].participant.label:
                             return d_players[i], r_players[j]
         for player in waiting_players:
@@ -129,8 +131,8 @@ def custom_export(players):
         yield [participant.DecisionLabID, participant.code, participant.role, participant.partner, p.offer, p.confl,
                p.bad, p.good, p.satisfied, p.regret, p.p_a, p.p_a_o, p.confl_0, p.bad_0, p.good_0, p.p_a_0, p.p_a_o_0,
                p.confl_25, p.bad_25, p.good_25, p.p_a_25, p.p_a_o_25,  p.confl_50, p.bad_50, p.good_50, p.p_a_50,
-               p.p_a_o_50, p.payoff, participant.payoff_plus_participation_fee(), participant.timo, session.code,
-               participant.id_in_session, p.group, p.fin1, p.fin2]
+               p.p_a_o_50, p.payoff.to_real_world_currency(session), participant.payoff_plus_participation_fee(),
+               participant.timo, session.code, participant.id_in_session, p.group, p.fin1, p.fin2]
 
 
 # PAGES
@@ -179,10 +181,10 @@ class PlayerA_Offer(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.role == Constants.dictator_role
+        return player.participant.role == 1
 
 
-class ResultsWaitPage(WaitPage):
+class ResultsWaitPageRandom(WaitPage):
     after_all_players_arrive = 'set_payoffs'
 
     @staticmethod
@@ -202,12 +204,12 @@ class ResultsWaitPage(WaitPage):
             return {
             'body_text': "Ihnen wurde die Rolle B zugewiesen. Person A entscheidet nun über den Betrag, der an Sie abgeben wird.",
             'title_text': "Bitte warten Sie.",
-        }
+            }
         if player.round_number == 2:
             return {
             'body_text': "Ihnen wurde nun erneut die Rolle B zugewiesen. Die neu zugeteilte Person A entscheidet nun wieder über den Betrag, der an Sie abgeben wird.",
             'title_text': "Bitte warten Sie.",
-        }
+            }
 
 
 class PlayerA_CBG(Page):
@@ -216,7 +218,7 @@ class PlayerA_CBG(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.role == Constants.dictator_role
+        return player.participant.role == 1
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -229,7 +231,7 @@ class PlayerA_SRPP(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.role == Constants.dictator_role
+        return player.participant.role == 1
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -251,7 +253,7 @@ class PlayerB_CBGPP(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.role == Constants.recipient_role and player.round_number == 1
+        return player.participant.role == 2 and player.round_number == 1
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -261,11 +263,11 @@ class PlayerB_CBGPP(Page):
 
 class PlayerB_CBGPP2(Page):
     form_model = 'player'
-    form_fields = ['confl', 'bad', 'good',]
+    form_fields = ['confl', 'bad', 'good', ]
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.role == Constants.recipient_role and player.round_number == 2
+        return player.participant.role == 2 and player.round_number == 2
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -279,7 +281,7 @@ class PlayerB_Alt0(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.role == Constants.recipient_role
+        return player.participant.role == 2
 
 
 class PlayerB_Alt25(Page):
@@ -288,7 +290,7 @@ class PlayerB_Alt25(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.role == Constants.recipient_role
+        return player.participant.role == 2
 
 
 class PlayerB_Alt50(Page):
@@ -297,7 +299,7 @@ class PlayerB_Alt50(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.role == Constants.recipient_role
+        return player.participant.role == 2
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -325,8 +327,8 @@ class Debriefing(Page):
             offer1=offer1,
             kept2=kept2,
             offer2=offer2,
-            total_kept=kept1 + kept2,
-            total_offer=offer1 + offer2,
+            total_kept=kept1+kept2,
+            total_offer=offer1+offer2,
             total_p1=p1.participant.payoff_plus_participation_fee().to_real_world_currency(player.session),
             total_p2=p2.participant.payoff_plus_participation_fee().to_real_world_currency(player.session),
         )
@@ -339,7 +341,7 @@ class Debriefing(Page):
 page_sequence = [
     GroupingWaitPage,
     PlayerA_Offer,
-    ResultsWaitPage,
+    ResultsWaitPageRandom,
     PlayerA_CBG,
     PlayerA_SRPP,
     PlayerB_CBGPP,

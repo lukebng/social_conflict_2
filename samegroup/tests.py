@@ -15,7 +15,7 @@ class PlayerBot(Bot):
                     yield PlayerA_SRPP, dict(satisfied=1, regret=5)
                     expect(self.player.satisfied, 1)
                     expect(self.player.regret, 5)
-            if self.player.id_in_group == 2:
+                if self.player.id_in_group == 2:
                     expect(self.player.payoff, self.player.group.get_player_by_id(1).offer)
                     yield PlayerB_CBGPP, dict(confl=3, bad=5, good=7, p_a=7, p_a_o=3)
                     expect(self.player.confl, 3)
