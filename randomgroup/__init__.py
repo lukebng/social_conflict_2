@@ -48,21 +48,6 @@ class Player(BasePlayer):
     regret = make_likert("")
     p_a = make_likert("")
     p_a_o = make_likert("")
-    confl_0 = make_likert("")
-    confl_25 = make_likert("")
-    confl_50 = make_likert("")
-    bad_0 = make_likert("")
-    bad_25 = make_likert("")
-    bad_50 = make_likert("")
-    good_0 = make_likert("")
-    good_25 = make_likert("")
-    good_50 = make_likert("")
-    p_a_0 = make_likert("")
-    p_a_25 = make_likert("")
-    p_a_50 = make_likert("")
-    p_a_o_0 = make_likert("")
-    p_a_o_25 = make_likert("")
-    p_a_o_50 = make_likert("")
     fin1 = models.IntegerField(initial=0)
     fin2 = models.IntegerField(initial=0)
 
@@ -121,18 +106,15 @@ def waiting_too_long(player):
 def custom_export(players):
     # header row
     yield ['DLCID', 'part_code', 'role', 'partner', 'transfer', 'expconf', 'objctbad', 'objctgood', 'Dsatisfac',
-           'Dregret', 'sameagain', 'othragain', 'expconf0', 'objbad0', 'objgood0', 'again0', 'othgain0', 'expconf25',
-           'objbad25', 'objgood25', 'again25', 'othgain25', 'expconf50', 'objbad50', 'objgood50', 'again50',
-           'othgain50', 'payoff', 'final_payoff', 'timeout', 'sessionid', 'id_in_sess', 'group', 'finished1',
-           'finished2']
+           'Dregret', 'sameagain', 'othragain','payoff', 'final_payoff', 'timeout', 'sessionid', 'id_in_sess', 'group',
+           'finished1', 'finished2']
     for p in players:
         participant = p.participant
         session = p.session
         yield [participant.DecisionLabID, participant.code, participant.role, participant.partner, p.offer, p.confl,
-               p.bad, p.good, p.satisfied, p.regret, p.p_a, p.p_a_o, p.confl_0, p.bad_0, p.good_0, p.p_a_0, p.p_a_o_0,
-               p.confl_25, p.bad_25, p.good_25, p.p_a_25, p.p_a_o_25,  p.confl_50, p.bad_50, p.good_50, p.p_a_50,
-               p.p_a_o_50, p.payoff.to_real_world_currency(session), participant.payoff_plus_participation_fee(),
-               participant.timo, session.code, participant.id_in_session, p.group, p.fin1, p.fin2]
+               p.bad, p.good, p.satisfied, p.regret, p.p_a_o_50, p.payoff.to_real_world_currency(session),
+               participant.payoff_plus_participation_fee(), participant.timo, session.code, participant.id_in_session,
+               p.group, p.fin1, p.fin2]
 
 
 # PAGES
@@ -235,12 +217,9 @@ class PlayerA_SRPP(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        if player.round_number == 1:
-            player.fin1 = 1
-            import time
-            player.participant.wait_page_arrival = time.time()
-        elif player.round_number == 2:
-            player.fin2 = 1
+        player.fin1 = 1
+        import time
+        player.participant.wait_page_arrival = time.time()
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -270,45 +249,17 @@ class PlayerB_CBGPP2(Page):
         return player.participant.role == 2 and player.round_number == 2
 
     @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.fin = 1
+        import time
+        player.participant.wait_page_arrival = time.time()
+
+
+    @staticmethod
     def vars_for_template(player: Player):
         p1 = player.group.get_player_by_id(1)
         return dict(kept=Constants.endowment - p1.offer, offer=p1.offer)
 
-
-class PlayerB_Alt0(Page):
-    form_model = 'player'
-    form_fields = ['confl_0', 'bad_0', 'good_0', 'p_a_0', 'p_a_o_0']
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.participant.role == 2
-
-
-class PlayerB_Alt25(Page):
-    form_model = 'player'
-    form_fields = ['confl_25', 'bad_25', 'good_25', 'p_a_25', 'p_a_o_25']
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.participant.role == 2
-
-
-class PlayerB_Alt50(Page):
-    form_model = 'player'
-    form_fields = ['confl_50', 'bad_50', 'good_50', 'p_a_50', 'p_a_o_50']
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.participant.role == 2
-
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        if player.round_number == 1:
-            player.fin1 = 1
-            import time
-            player.participant.wait_page_arrival = time.time()
-        elif player.round_number == 2:
-            player.fin2 = 1
 
 
 class Debriefing(Page):
@@ -346,8 +297,5 @@ page_sequence = [
     PlayerA_SRPP,
     PlayerB_CBGPP,
     PlayerB_CBGPP2,
-    PlayerB_Alt0,
-    PlayerB_Alt25,
-    PlayerB_Alt50,
     Debriefing,
 ]
