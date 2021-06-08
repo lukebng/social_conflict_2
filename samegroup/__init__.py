@@ -86,18 +86,19 @@ def waiting_too_long(player):
 
 def custom_export(players):
     # header row
-    yield ['DLCID', 'role', 'transfer', 'expconf', 'objctbad', 'objctgood', 'Dsatisfac', 'Dregret', 'sameagain',
-           ' othragain', 'ambv1', 'ambv2', 'ambv3', 'ambv4', 'ambv5', 'ambv6', 'ambv7', 'ambv8', 'ambv9', 'ambv10',
-           'expconf0', 'objbad0', 'objgood0', 'again0', 'othgain0', 'expconf25', 'objbad25', 'objgood25', 'again25',
-           'othgain25', 'expconf50', 'objbad50', 'objgood50', 'again50', 'othgain50', 'payoff', 'timeout', 'sessionid',
-           'id_in_sess', 'group', 'part_code', 'finished']
+    yield ['DLCID', 'part_code', 'role', 'partner', 'transfer', 'expconf', 'objctbad', 'objctgood', 'Dsatisfac',
+           'Dregret', 'sameagain', 'othragain', 'expconf0', 'objbad0', 'objgood0', 'again0', 'othgain0', 'expconf25',
+           'objbad25', 'objgood25', 'again25', 'othgain25', 'expconf50', 'objbad50', 'objgood50', 'again50',
+           'othgain50', 'payoff', 'final_payoff', 'timeout', 'sessionid', 'id_in_sess', 'group', 'finished1',
+           'finished2']
     for p in players:
         participant = p.participant
         session = p.session
-        yield [participant.label, p.role, p.offer, p.confl, p.bad, p.good, p.satisfied, p.regret, p.p_a, p.p_a_o, p.amb1, p.amb2,
-               p.amb3, p.amb4, p.amb5, p.amb6, p.amb7, p.amb8, p.amb9, p.amb10, p.confl_0, p.bad_0, p.good_0, p.p_a_0,
-               p.p_a_o_0,  p.confl_25, p.bad_25, p.good_25, p.p_a_25, p.p_a_o_25,  p.confl_50, p.bad_50, p.good_50,
-               p.p_a_50, p.p_a_o_50, p.payoff, p.to, session.code, participant.id_in_session, p.group, participant.code, p.fin]
+        yield [participant.DecisionLabID, participant.code, participant.role, participant.partner, p.offer, p.confl,
+               p.bad, p.good, p.satisfied, p.regret, p.p_a, p.p_a_o, p.confl_0, p.bad_0, p.good_0, p.p_a_0, p.p_a_o_0,
+               p.confl_25, p.bad_25, p.good_25, p.p_a_25, p.p_a_o_25,  p.confl_50, p.bad_50, p.good_50, p.p_a_50,
+               p.p_a_o_50, p.payoff.to_real_world_currency(), participant.payoff_plus_participation_fee(),
+               participant.timo, session.code, participant.id_in_session, p.group, p.fin1, p.fin2]
 
 
 def group_by_arrival_time_method(subsession, waiting_players):
@@ -116,19 +117,46 @@ def group_by_arrival_time_method(subsession, waiting_players):
             if waiting_too_long(player):
                 # make a single-player group.
                 return [player]
+    elif subsession.round_number == 2:
+        d_players = [p for p in waiting_players if p.participant.role == 1]
+        r_players = [p for p in waiting_players if p.participant.role == 2]
+        if len(waiting_players) >= 1:
+            if len(d_players) >= 1 and len(r_players) >= 1:
+                for i in range(len(d_players)):
+                    for j in range(len(r_players)):
+                        if d_players[i].participant.partner == r_players[j].participant.label:
+                            return d_players[i], r_players[j]
+        for player in waiting_players:
+            if waiting_too_long(player):
+                return [player]
 
 # PAGES
 class GroupingWaitPage(WaitPage):
     group_by_arrival_time = True
 
     @staticmethod
-    def is_displayed(player: Player):
-        return player.round_number == 1
+    def app_after_this_page(player, upcoming_apps):
+        group = player.group
+        if len(group.get_players()) == 1:
+            return "showup"
 
     @staticmethod
     def before_next_page(player, timeout_happened):
         import time
         player.participant.wait_page_arrival = time.time()
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        if player.round_number == 1:
+            return {
+                'body_text': "Ihnen wird nun eine Person zugeteilt. Sobald die nächste Person eintrifft, geht es los.",
+                'title_text': "Bitte warten Sie.",
+            }
+        elif player.round_number == 2:
+            return {
+                'body_text': "Ihr*e Partner*in aus der 1. Runde braucht noch etwas Zeit. Sobald die Person eintrifft, geht es los.",
+                'title_text': "Bitte warten Sie.",
+            }
 
 
 class PlayerA_Offer(Page):
@@ -167,10 +195,16 @@ class ResultsWaitPage(WaitPage):
 
     @staticmethod
     def vars_for_template(player: Player):
-        return {
-            'body_text': "Ihnen wurde die Rolle B zugewiesen. Person A entscheidet nun über den Betrag, der an Sie abgeben wird.",
-            'title_text': "Bitte warten Sie.",
-        }
+        if player.round_number == 1:
+            return {
+                'body_text': "Ihnen wurde die Rolle B zugewiesen. Person A entscheidet nun über den Betrag, der an Sie abgeben wird.",
+                'title_text': "Bitte warten Sie.",
+            }
+        if player.round_number == 2:
+            return {
+                'body_text': "Ihnen wurde nun erneut die Rolle B zugewiesen. Person A entscheidet nun über den Betrag, der an Sie abgeben wird.",
+                'title_text': "Bitte warten Sie.",
+            }
 
 
 class PlayerA_CBG(Page):
@@ -193,6 +227,13 @@ class PlayerA_SRPP(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.role == Constants.dictator_role
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        if player.round_number == 1:
+            player.fin1 = 1
+        elif player.round_number == 2:
+            player.fin2 = 1
 
     @staticmethod
     def vars_for_template(player: Player):
