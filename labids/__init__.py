@@ -40,6 +40,11 @@ def DecisionLabId_error_message(player: Player, value):
         return "Falsche Decision Lab ID!"
     if value == "0000000":
         return "Fehlerhafe Decision Lab ID!"
+    # Already participated
+    with open('labids/Participated.txt', 'r') as file:
+        txt = file.read()
+    if(values['DecisionLabId'] in txt and values['DecisionLabId'] != "1234555"):
+        return "An dieser Studie haben Sie bereits teilgenommen!"
 
 
 # PAGES
@@ -51,6 +56,11 @@ class IDPage(Page):
     def before_next_page(player: Player, timeout_happened):
         player.participant.DecisionLabID = player.DecisionLabId
         player.participant.label = player.participant.code
+
+        with open('labids/Participated.txt', 'a') as file:
+            if(player.participant.label != "1234555"):
+                file.write('\n')
+                file.write(player.participant.label)
 
 
 page_sequence = [IDPage]
