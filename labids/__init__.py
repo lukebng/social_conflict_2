@@ -43,7 +43,7 @@ def DecisionLabId_error_message(player: Player, value):
     # Already participated
     with open('labids/Participated.txt', 'r') as file:
         txt = file.read()
-    if(values['DecisionLabId'] in txt and values['DecisionLabId'] != "1234555"):
+    if(value in txt and value != "1234555"):
         return "An dieser Studie haben Sie bereits teilgenommen!"
 
 
@@ -55,12 +55,6 @@ class IDPage(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.participant.DecisionLabID = player.DecisionLabId
-        player.participant.label = player.participant.code
-
-        with open('labids/Participated.txt', 'a') as file:
-            if(player.participant.label != "1234555"):
-                file.write('\n')
-                file.write(player.participant.label)
-
+        player.participant.label = player.DecisionLabId
 
 page_sequence = [IDPage]

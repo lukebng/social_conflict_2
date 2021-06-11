@@ -6,8 +6,8 @@ SESSION_CONFIGS = [
         name='SoCo',
         display_name="Entscheidungsaufgabe",
         num_demo_participants=2,
-        app_sequence=['consent', 'labids', 'instructions', 'samegroup', 'randomgroup', 'showup'],
-        use_browser_bots=True,
+        app_sequence=['labids', 'consent', 'instructions', 'samegroup', 'randomgroup', 'showup'],
+        use_browser_bots=False,
     ),
 ]
 
@@ -33,9 +33,7 @@ POINTS_CUSTOM_NAME = 'Cent'
 ROOMS = [
     dict(
         name='soziale_interaktionen',
-        display_name='Entscheidungsaufgabe Raum',
-        participant_label_file='_rooms/socialconflict.txt',
-        use_secure_urls=True
+        display_name='Entscheidungsaufgabe Raum'
     )
 ]
 

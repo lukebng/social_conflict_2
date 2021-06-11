@@ -65,6 +65,11 @@ class Understanding(Page):
         player.participant.wait_page_arrival = time.time()
         player.participant.timo = False
 
+        with open('labids/Participated.txt', 'a') as file:
+            if player.participant.label != "1234555":
+                file.write('\n')
+                file.write(player.participant.label)
+
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
         player.participant.treat = next(treats)
