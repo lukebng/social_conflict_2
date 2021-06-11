@@ -65,7 +65,7 @@ def set_payoffs(group: Group):
 def waiting_too_long(player):
     participant = player.participant
     import time
-    return time.time() - participant.wait_page_arrival > 60
+    return time.time() - participant.wait_page_arrival > 300
 
 
 def custom_export(players):
@@ -91,8 +91,6 @@ def group_by_arrival_time_method(subsession, waiting_players):
             p2.participant.role = 2
             p1.participant.partner = p2.participant.label
             p2.participant.partner = p1.participant.label
-            print('partner of p1 is ', p1.participant.partner)
-            print('partner of p2 is ', p2.participant.partner)
             return waiting_players[:2]
         for player in waiting_players:
             if waiting_too_long(player):
@@ -145,16 +143,13 @@ class PlayerA_Offer(Page):
     form_model = 'player'
     form_fields = ['offer']
 
-    timeout_seconds = 60
+    timeout_seconds = 300
 
     @staticmethod
     def before_next_page(player, timeout_happened):
         if timeout_happened:
             player.to = True
             player.participant.timo = True
-        else:
-            print("SaCo: In round ", player.round_number, "player ", player.participant.label, " is in group with ",
-                 player.get_others_in_group()[0].participant.label)
 
     @staticmethod
     def is_displayed(player: Player):
@@ -163,10 +158,6 @@ class PlayerA_Offer(Page):
 
 class ResultsWaitPageSame(WaitPage):
     after_all_players_arrive = 'set_payoffs'
-
-    @staticmethod
-    def before_next_page(player, timeout_happened):
-        print("Payoff of ", player.participant.label, " in this round is ", player.payoff)
 
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
