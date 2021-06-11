@@ -47,8 +47,7 @@ class Player(BasePlayer):
     p_a = make_likert("")
     p_a_o = make_likert("")
     p_a_o_50 = make_likert("")
-    fin1 = models.IntegerField(initial=0)
-    fin2 = models.IntegerField(initial=0)
+    fin = models.IntegerField(initial=0)
 
 
 # FUNCTIONS
@@ -72,14 +71,14 @@ def custom_export(players):
     # header row
     yield ['DLCID', 'part_code', 'role', 'partner', 'transfer', 'expconf', 'objctbad', 'objctgood', 'Dsatisfac',
            'Dregret', 'sameagain', 'othragain','payoff', 'final_payoff', 'timeout', 'sessionid', 'id_in_sess',
-           'group', 'finished1', 'finished2']
+           'group', 'finished']
     for p in players:
         participant = p.participant
         session = p.session
         yield [participant.DecisionLabID, participant.code, participant.role, participant.partner, p.offer, p.confl,
                p.bad, p.good, p.satisfied, p.regret, p.p_a, p.p_a_o, p.payoff.to_real_world_currency(session),
                participant.payoff_plus_participation_fee(), participant.timo, session.code, participant.id_in_session,
-               p.group, p.fin1, p.fin2]
+               p.group, p.fin]
 
 
 def group_by_arrival_time_method(subsession, waiting_players):
@@ -237,7 +236,7 @@ class PlayerB_CBGPP2(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.fin1 = 1
+        player.fin = 1
         import time
         player.participant.wait_page_arrival = time.time()
 

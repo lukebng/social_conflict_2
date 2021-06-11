@@ -48,8 +48,7 @@ class Player(BasePlayer):
     regret = make_likert("")
     p_a = make_likert("")
     p_a_o = make_likert("")
-    fin1 = models.IntegerField(initial=0)
-    fin2 = models.IntegerField(initial=0)
+    fin = models.IntegerField(initial=0)
 
 
 # FUNCTIONS
@@ -101,14 +100,14 @@ def custom_export(players):
     # header row
     yield ['DLCID', 'part_code', 'role', 'partner', 'transfer', 'expconf', 'objctbad', 'objctgood', 'Dsatisfac',
            'Dregret', 'sameagain', 'othragain','payoff', 'final_payoff', 'timeout', 'sessionid', 'id_in_sess', 'group',
-           'finished1', 'finished2']
+           'finished']
     for p in players:
         participant = p.participant
         session = p.session
         yield [participant.DecisionLabID, participant.code, participant.role, participant.partner, p.offer, p.confl,
                p.bad, p.good, p.satisfied, p.regret, p.p_a_o_50, p.payoff.to_real_world_currency(session),
                participant.payoff_plus_participation_fee(), participant.timo, session.code, participant.id_in_session,
-               p.group, p.fin1, p.fin2]
+               p.group, p.fin]
 
 
 # PAGES
@@ -240,7 +239,6 @@ class PlayerB_CBGPP2(Page):
         player.fin = 1
         import time
         player.participant.wait_page_arrival = time.time()
-
 
     @staticmethod
     def vars_for_template(player: Player):
