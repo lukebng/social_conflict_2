@@ -46,7 +46,6 @@ class Player(BasePlayer):
     regret = make_likert("")
     p_a = make_likert("")
     p_a_o = make_likert("")
-    p_a_o_50 = make_likert("")
     fin = models.IntegerField(initial=0)
 
 
@@ -70,7 +69,7 @@ def waiting_too_long(player):
 def custom_export(players):
     # header row
     yield ['DLCID', 'part_code', 'role', 'partner', 'transfer', 'expconf', 'objctbad', 'objctgood', 'Dsatisfac',
-           'Dregret', 'sameagain', 'othragain','payoff', 'final_payoff', 'timeout', 'sessionid', 'id_in_sess',
+           'Dregret', 'sameagain', 'othragain', 'payoff', 'final_payoff', 'timeout', 'sessionid', 'id_in_sess',
            'group', 'finished']
     for p in players:
         participant = p.participant
@@ -202,10 +201,7 @@ class PlayerA_SRPP(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        if player.round_number == 1:
-            player.fin1 = 1
-        elif player.round_number == 2:
-            player.fin2 = 1
+        player.fin = 1
 
     @staticmethod
     def vars_for_template(player: Player):

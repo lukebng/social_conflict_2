@@ -203,7 +203,7 @@ class PlayerA_SRPP(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.fin1 = 1
+        player.fin = 1
         import time
         player.participant.wait_page_arrival = time.time()
 
