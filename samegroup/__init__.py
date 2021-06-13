@@ -75,7 +75,7 @@ def custom_export(players):
         participant = p.participant
         session = p.session
         yield [participant.DecisionLabID, participant.code, participant.role, p.round_number, participant.partner,
-               p.offer.to_real_world_currency(session), p.confl, p.bad, p.good, p.satisfied, p.regret, p.p_a, p.p_a_o,
+               p.offer, p.confl, p.bad, p.good, p.satisfied, p.regret, p.p_a, p.p_a_o,
                p.payoff.to_real_world_currency(session), participant.payoff_plus_participation_fee(), participant.timo,
                session.code, participant.id_in_session, p.group, p.fin]
 
