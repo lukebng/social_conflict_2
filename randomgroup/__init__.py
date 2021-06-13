@@ -99,13 +99,13 @@ def waiting_too_long(player):
 def custom_export(players):
     # header row
     yield ['DLCID', 'part_code', 'role', 'partner', 'transfer', 'expconf', 'objctbad', 'objctgood', 'Dsatisfac',
-           'Dregret', 'sameagain', 'othragain','payoff', 'final_payoff', 'timeout', 'sessionid', 'id_in_sess', 'group',
+           'Dregret', 'sameagain', 'othragain', 'payoff', 'final_payoff', 'timeout', 'sessionid', 'id_in_sess', 'group',
            'finished']
     for p in players:
         participant = p.participant
         session = p.session
         yield [participant.DecisionLabID, participant.code, participant.role, participant.partner, p.offer, p.confl,
-               p.bad, p.good, p.satisfied, p.regret, p.p_a_o_50, p.payoff.to_real_world_currency(session),
+               p.bad, p.good, p.satisfied, p.regret, p.p_a, p.p_a_o, p.payoff.to_real_world_currency(session),
                participant.payoff_plus_participation_fee(), participant.timo, session.code, participant.id_in_session,
                p.group, p.fin]
 
