@@ -55,6 +55,6 @@ class IDPage(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.participant.DecisionLabID = player.DecisionLabId
-        player.participant.label = player.participant.code
+        player.participant.label = player.participant.DecisionLabID
 
 page_sequence = [IDPage]
