@@ -7,7 +7,7 @@ SESSION_CONFIGS = [
         display_name="Entscheidungsaufgabe",
         num_demo_participants=2,
         app_sequence=['labids', 'consent', 'instructions', 'samegroup', 'randomgroup', 'showup'],
-        use_browser_bots=True,
+        use_browser_bots=False,
     ),
 ]
 
