@@ -221,6 +221,12 @@ class PlayerB_CBGPP(Page):
         return player.participant.role == 2 and player.round_number == 1
 
     @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.fin = 1
+        import time
+        player.participant.wait_page_arrival = time.time()
+
+    @staticmethod
     def vars_for_template(player: Player):
         p1 = player.group.get_player_by_id(1)
         return dict(kept=Constants.endowment - p1.offer, offer=p1.offer)
@@ -237,8 +243,6 @@ class PlayerB_CBGPP2(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.fin = 1
-        import time
-        player.participant.wait_page_arrival = time.time()
 
     @staticmethod
     def vars_for_template(player: Player):

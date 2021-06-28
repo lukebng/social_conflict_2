@@ -43,6 +43,7 @@ ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 
 DEMO_PAGE_INTRO_HTML = """ """
 
+DEBUG = 'False'
 
 SECRET_KEY = 'xj$ii$mrxjjtg)dz$-9ll&b#i5ac2!cguf!gj%z6e02a=1-cf_'
 

@@ -202,6 +202,8 @@ class PlayerA_SRPP(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.fin = 1
+        import time
+        player.participant.wait_page_arrival = time.time()
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -215,6 +217,12 @@ class PlayerB_CBGPP(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.participant.role == 2 and player.round_number == 1
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.fin = 1
+        import time
+        player.participant.wait_page_arrival = time.time()
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -233,8 +241,6 @@ class PlayerB_CBGPP2(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.fin = 1
-        import time
-        player.participant.wait_page_arrival = time.time()
 
     @staticmethod
     def vars_for_template(player: Player):
